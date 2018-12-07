@@ -1,0 +1,184 @@
+//________________________________________INITIATION_PART__________________________________________
+//_____________SETTINGS
+exports.active=true;//this module activate (deactivate module and all events,commands,boot in it if value is false)
+exports.events={};// {} - activate/false - deactive
+exports.commands={};// {} - activate/false -deactive
+exports.boots={};// {} - activate/false -deactive
+exports.delay=async(duration)=>{await new Promise(resolve=>setTimeout(resolve,duration))};
+//exports.m=require('./this_project_main.js'); //inculde this project`s main file if present (same directory)
+//____________DICTIONARY//dictionary set, elements by accesed by module.exports.d.some_phase[client.lang] 
+exports.d={
+
+      duel:['Duel!','Дуэль!']//aliase
+     ,fire:['Fire!','Огонь!']
+     ,field1:[' ','<:34:402137690318962688>☠ ']
+      ,field:['[lose...]','[трагически погибает...]']
+     ,recovery:['[recovery some minutes later ','[воскрешение через ']
+     ,recovered:['is recovered now','Воскрес  <:37:402137752746983445> ']
+     ,start_phrase:['Get ready your guns for buttle.','Дуэлянты, зарядите ваши псевдоревольверы.']
+     ,minutes:['minutes]','минут]']
+     ,time_is_out:['Time awaiting reactions is out','Время ожидания реакции истекло']
+     ,aganist:[' 💥 🔫  ',' <:45:483222500570955777>      💥 🔫  ']
+     ,aganist_fault:[' 💥 🔫  ',' <:25:402137378048835584>      💥 🔫  ']
+     ,aganist_misfire:['  🔫  ',' <:9_:483222163797835794>       🔫  ']
+     ,aganist_evade:[' 💥 🔫  ',' <:14:488334083613523978>      💥 🔫  ']
+     ,fault:[' `fault` ',' `промах` ']
+     ,misfire:[' `misfire` ',' `осечка` ']
+     ,evade:[' `evade` ',' `уклонился` ']
+     
+};//d end
+//___________ENVORIMENTAL//envorimental set, elements accesed by module.exports.e.some_envorimental
+exports.e={
+     image_url:'https://raw.githubusercontent.com/e3Dr8nj/file_storage/master/30EMZfei1z7xK.gif'
+     ,delay_ban_time:30//sec
+     ,react_awaiting_time:5//min
+     ,ban_time:40//min
+     
+     ,ban_role_name:'Muted'  
+};//e end
+exports.lang=1;
+//___________TEMPRARY
+exports.t={
+   banned:{
+//[user_id]:{role1_id,role2_id,role3_id...}
+   }
+};//t end
+//___________
+//_________________________________________INITIATION_PART_END___________________________________________
+//_________________________________________EVENTS_PART_________________________________________________
+module.exports.events.someEvent={ on:true,  run:async(client,event_parametrs)=>{try{
+//if on this function triggers on deffined event
+              
+
+}catch(err){console.log(err);};}};//
+//_________e1
+module.exports.events.guildMemberAdd={ on:true,  run:async(client,member)=>{try{
+//check if member has banned add super_ban role
+            console.log(client.duel);
+            if(client.duel&&client.duel[member.user.id]&&client.duel[member.user.id].length!=0){
+                let ban_role = member.guild.roles.find(r=>r.name==module.exports.e.ban_role_name); 
+                console.log('banned mmb come');
+                member.addRole(ban_role);
+            };//if end
+            
+}catch(err){console.log(err);};}};//
+//___________________________________________EVENTS_PART_END__________________________________________
+//_________________________________________COMMANDS_PART_________________________________________________
+module.exports.commands.someCommand={ on:true, aliase:module.exports.d.duel[module.exports.lang], run:async(client,message,args)=>{try{
+//if on this function triggers on deffined command
+   let emb={
+          description:module.exports.d.start_phrase[client.lang]
+           ,image: {url:module.exports.e.image_url}
+          };
+   let emoji = '🔫';
+   let msg = await message.channel.send({embed:emb});
+   await msg.react(emoji);
+   await module.exports.delay(1000);
+   let filter=(reaction,user)=>(reaction.emoji.name==emoji);
+   let resolve = await msg.awaitReactions(filter,{max:2,time:module.exports.e.react_awaiting_time*1000*60,errors:['time']}).then(collected=>{
+      return collected.last();}).catch(err=>{console.log(err);return false;});
+   
+   if(!resolve) {message.channel.send(module.exports.d.time_is_out[client.lang]); return;};
+
+   let mmbs=[];
+   await resolve.users.map(u=>{
+         if(u.id!=client.user.id){
+           let mmb=message.member.guild.members.get(u.id);
+           mmbs.push(mmb);
+         };
+   ;});
+  
+  await message.channel.send(module.exports.d.fire[client.lang]);
+  await module.exports.delay(1000);
+  let rnd = Math.floor(Math.random()*2);
+  await module.exports.delay(1000);
+  
+  let loser = mmbs[rnd];
+  let winner =(rnd==1)?mmbs[0]:mmbs[1];
+  let rnd_game=Math.floor(Math.random()*4);
+  
+  if(rnd_game==0) {
+  await message.channel.send(loser+module.exports.d.aganist_fault[client.lang]+winner+' '+module.exports.d.fault[client.lang]);
+  return module.exports.commands.someCommand.run(client,message);
+  };//if field
+  if(rnd_game==1) {
+  await message.channel.send(loser+module.exports.d.aganist_misfire[client.lang]+winner+' '+module.exports.d.misfire[client.lang]);
+  return module.exports.commands.someCommand.run(client,message);
+  };//if field
+  if(rnd_game==2) {
+  await message.channel.send(module.exports.d.evade[client.lang]+loser+module.exports.d.aganist_evade[client.lang]+winner);
+  return module.exports.commands.someCommand.run(client,message);
+  };//if field
+  await message.channel.send(loser+module.exports.d.aganist[client.lang]+winner);
+ let x=module.exports.e.delay_ban_time;
+      let str=loser+module.exports.d.field1[client.lang]+'```ini\n '+ module.exports.d.field[client.lang];
+      let msg2 =await message.channel.send(str+"["+x+"]"+"\n```");
+      while(x!=0){console.log(x);
+         await module.exports.delay(1000); x--;
+         await msg2.edit(str+"["+x+"]"+"\n```");
+      };
+       x=module.exports.e.ban_time;
+     await message.channel.send("```ini\n"+module.exports.d.recovery[client.lang]+" "+x+" "+module.exports.d.minutes[client.lang]+"\n```");
+   
+   if(!client.duel){client.duel={}};
+   client.duel[loser.user.id]=[];
+    let roles_arr=[];
+//____
+    let key_arr= loser.roles.keyArray().slice();
+    for(let i=0;i<key_arr.length;i++){
+        
+        await module.exports.delay(3000);
+        await roles_arr.push(key_arr[i]);
+        loser.removeRole(message.channel.guild.roles.get(key_arr[i]));
+    };//for
+//__________
+/*
+   await loser.roles.map(r=>{
+       roles_arr.push(r.id);
+       loser.removeRole(r);
+   }); //roles map
+*/
+     client.duel[loser.user.id]= await roles_arr.slice();
+   console.log('all roles deleted from mmb');
+    await module.exports.delay(1000);
+    let ban_role = message.guild.roles.find(r=>r.name==module.exports.e.ban_role_name); 
+    if(!!ban_role){await loser.addRole(ban_role); console.log('ban role was added to mmb');};
+//___________
+    
+    let ban=true;
+    await module.exports.delay(x*1000*60);
+    await loser.removeRole(ban_role); await console.log('ban_role removed');
+    await module.exports.delay(1000);
+   // console.log(client.duel);
+  // await client.duel[loser.user.id].map(r_id=>{let role = message.guild.roles.get(r_id); if(role){loser.addRole(role);};});
+//__
+      key_arr= client.duel[loser.user.id];  console.log(key_arr);
+    for( i=0;i<key_arr.length;i++){ 
+          console.log(key_arr[i]);
+         let role=message.channel.guild.roles.get(key_arr[i]);
+        await module.exports.delay(3000);
+        loser.addRole(role);
+    };//for
+//__
+    await console.log('all roles recovered');
+    client.duel[loser.user.id]=[];
+    await message.channel.send(loser+' '+module.exports.d.recovered[client.lang]);
+//_______________
+
+}catch(err){console.log(err);};}};//
+
+//___________________________________________COMMANDS_PART_END___________________________________________
+//_________________________________________BOOTS_PART___________________________________________________
+module.exports.boots.someBoot={ on:true,  run:async(client)=>{try{
+//if on this function triggers on ready event (with some delay)
+              
+
+}catch(err){console.log(err);};}};//
+
+//___________________________________________BOOTS_PART_END______________________________________________
+
+//___________________________
+module.exports.description=async(client)=>{try{
+  let str=client.prefix+module.exports.d.duel[client.lang]+' Начать дуэль, бот ожидает нажатие на реакцию револьвера двумя дуэлянтами после чего начинаетс дуэль вследствии которой один из них отправляется в бан.';
+}catch(err){console.log(err);};};//
+//___________________________
