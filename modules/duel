@@ -64,8 +64,9 @@ module.exports.events.guildMemberAdd={ on:true,  run:async(client,member)=>{try{
 }catch(err){console.log(err);};}};//
 //___________________________________________EVENTS_PART_END__________________________________________
 //_________________________________________COMMANDS_PART_________________________________________________
-module.exports.commands.someCommand={ on:true, aliase:module.exports.d.duel[module.exports.lang], run:async(client,message,args)=>{try{
+module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module.exports.lang], run:async(client,message,args)=>{try{
 //if on this function triggers on deffined command
+   if(!client.duel.active){ return;};
    let emb={
           description:module.exports.d.start_phrase[client.lang]
            ,image: {url:module.exports.e.image_url}
@@ -99,15 +100,15 @@ module.exports.commands.someCommand={ on:true, aliase:module.exports.d.duel[modu
   
   if(rnd_game==0) {
   await message.channel.send(loser+module.exports.d.aganist_fault[client.lang]+winner+' '+module.exports.d.fault[client.lang]);
-  return module.exports.commands.someCommand.run(client,message);
+  return module.exports.commands.duelStart.run(client,message);
   };//if field
   if(rnd_game==1) {
   await message.channel.send(loser+module.exports.d.aganist_misfire[client.lang]+winner+' '+module.exports.d.misfire[client.lang]);
-  return module.exports.commands.someCommand.run(client,message);
+  return module.exports.commands.duelStart.run(client,message);
   };//if field
   if(rnd_game==2) {
   await message.channel.send(module.exports.d.evade[client.lang]+loser+module.exports.d.aganist_evade[client.lang]+winner);
-  return module.exports.commands.someCommand.run(client,message);
+  return module.exports.commands.duelStart.run(client,message);
   };//if field
   await message.channel.send(loser+module.exports.d.aganist[client.lang]+winner);
  let x=module.exports.e.delay_ban_time;
@@ -132,12 +133,7 @@ module.exports.commands.someCommand={ on:true, aliase:module.exports.d.duel[modu
         loser.removeRole(message.channel.guild.roles.get(key_arr[i]));
     };//for
 //__________
-/*
-   await loser.roles.map(r=>{
-       roles_arr.push(r.id);
-       loser.removeRole(r);
-   }); //roles map
-*/
+
      client.duel[loser.user.id]= await roles_arr.slice();
    console.log('all roles deleted from mmb');
     await module.exports.delay(1000);
@@ -166,7 +162,20 @@ module.exports.commands.someCommand={ on:true, aliase:module.exports.d.duel[modu
 //_______________
 
 }catch(err){console.log(err);};}};//
-
+//___________________c1
+module.exports.commands.duelOn={ on:true, aliase:'дуэлиРазрешить!', run:async(client,message,args)=>{try{
+//if on this function triggers on deffined command
+              client.duel.active=true;
+              message.channel.send('Дуэли разрешены!');
+              return;
+}catch(err){console.log(err);};}};//
+//___________________c2
+module.exports.commands.duelOff={ on:true, aliase:'дуэлиЗапретить!', run:async(client,message,args)=>{try{
+//if on this function triggers on deffined command
+              client.duel.active=false;
+              message.channel.send('Дуэли запрещены!');
+              return;
+}catch(err){console.log(err);};}};//
 //___________________________________________COMMANDS_PART_END___________________________________________
 //_________________________________________BOOTS_PART___________________________________________________
 module.exports.boots.someBoot={ on:true,  run:async(client)=>{try{
@@ -176,7 +185,11 @@ module.exports.boots.someBoot={ on:true,  run:async(client)=>{try{
 }catch(err){console.log(err);};}};//
 
 //___________________________________________BOOTS_PART_END______________________________________________
+module.exports.boots.someBoot={ on:true,  run:async(client)=>{try{
+//if on this function triggers on ready event (with some delay)
+           client.duel={}; client.duel.active=false;
 
+}catch(err){console.log(err);};}};//
 //___________________________
 module.exports.description=async(client)=>{try{
   let str=client.prefix+module.exports.d.duel[client.lang]+' Начать дуэль, бот ожидает нажатие на реакцию револьвера двумя дуэлянтами после чего начинаетс дуэль вследствии которой один из них отправляется в бан.';
