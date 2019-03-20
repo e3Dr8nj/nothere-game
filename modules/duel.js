@@ -103,6 +103,8 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
   let loser = mmbs[rnd];
   let winner =(rnd==1)?mmbs[0]:mmbs[1];
   let rnd_game=Math.floor(Math.random()*5);
+  client.duel_count=(client.duel_count)?client.duel_count+1:0;
+  if (Number(client.duel_count)<7&&rnd_game==3){rnd_game=2;};
   //rnd_game=3;
   if(rnd_game==0) {
   await message.channel.send(loser+module.exports.d.aganist_fault[client.lang]+winner+' '+module.exports.d.fault[client.lang]);
@@ -117,13 +119,17 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
   return module.exports.commands.duelStart.run(client,message);
   };//if field
   if(rnd_game==3) {
-  await message.channel.send(loser+' '+winner+' '+module.exports.d.both[client.lang]);
+  //await message.channel.send(loser+' '+winner+' '+module.exports.d.both[client.lang]);
+      let lia = message.guild.members.get('436917208560435211');
+    lia=(lia)?lia:' ';
+ await message.channel.send(winner+loser+'<:45:483222500570955777> <:45:483222500570955777>    💥 🔫'+lia+" "+module.exports.d.both[client.lang]);
+ 
   await module.exports.mute(client,message,loser);
   await module.exports.delay(30*1000);
   await module.exports.mute(client,message,winner);
   await module.exports.delay(module.exports.e.ban_time*1000*60);
   await message.channel.send(loser+' '+winner+' '+module.exports.d.recovered_both[client.lang]);
-  return;
+   return;
  // return module.exports.commands.duelStart.run(client,message);
   };//if field
   await message.channel.send(loser+module.exports.d.aganist[client.lang]+winner);
@@ -204,10 +210,10 @@ module.exports.commands.duelOff={ on:true, aliase:'дуэлиЗапретить!
               return;
 }catch(err){console.log(err);};}};//
  //_______________test
-module.exports.commands.test={ on:true, aliase:'тест', run:async(client,message,args)=>{try{
+module.exports.commands.test={ on:true, aliase:'тест2', run:async(client,message,args)=>{try{
 //if on this function triggers on deffined command
              
-              message.channel.send('\помолчика');
+              //message.channel.send('\помолчика');
               return;
 }catch(err){console.log(err);};}};//
 //___________________________________________COMMANDS_PART_END___________________________________________

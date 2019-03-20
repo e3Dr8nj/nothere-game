@@ -9,54 +9,71 @@ app.listen(process.env.PORT);
 setInterval(() => {
   http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
 }, 280000);
+
+
+/*
+const process={
+  env:{
+   TOKEN_BOT:'***'//TOKEN BOT HERE
+  }
+};
+*/
+
 const Discord = require("discord.js");
 const client = new Discord.Client();
-client.SERVER_ID='301063859702071316';
-client.Attachment = Discord.Attachment;
-client.lang = 1;
-client.data={
-dataBase_name:'test_bd.bd',
-tableRoles_name:'table_roles'
-
-};//client.data end
-
-client.translation=true;
-client.bd_name='servers_data_test.bd';
-client.table_role_name='table_role';
 const fs = require("fs");
+//___________
 client.commands={};
-const config = {};
-config.prefix="!";
-client.prefix=config.prefix;
-client.system={};
+client.events_primitive={};
+client.test_mode=false;
+//______________
+client.prefix='!';
+client.SERVER_ID='301063859702071316';
+//client.SERVER_ID='';//SERVER ID HERE
 
-client.global={};
+client.on('ready',() => {try{
+        console.log('Ready');
+        return;
+}catch(err){console.log(err);}; });
 
-client.consoleColor={
-   blue:function(str){return '\x1b[44m'+str+'\x1b[0m';}
-   ,red:function(str){return '\x1b[45m'+str+'\x1b[0m';}
-   ,green:function(str){return '\x1b[42m'+str+'\x1b[0m';}
-   ,default:function(str){return '\x1b[0m'+str+'\x1b[0m';}
-};
-client.console=(arr)=>{
-//arr=[ [e0,e1],[e0,e1] ]
-   let new_str='';
-   arr.map(e=>{
-         
-         if(e[1]==undefined||!client.consoleColor[e[1]]){e[1]='default'};;
-         new_str+=client.consoleColor[e[1]](e[0])+" ";
-          });
-   console.log(new_str);
-};//console end
-
-
+/*
 client.on("raw", (...args) => {try{
-   //console.log('raw');
+   console.log('raw');
    let raw = require(`./raw.js`);
    raw.run(client,...args);
-}catch(err){console.log(err);}; });//ready end
+}catch(err){console.log(err);}; });
+*/
+//___________
+let RH=require(`./raw.js`);
 
+RH.folder_name='modules';
+/*
+//_________
+
+let some_module = require(`./eval.js`);
+//some_module.marge(); --finde RH file and integrate with him
+//client.RH_module_to_marge='';
+RH.external_module.push(some_module);
+let em=require(`./bad_words_delete.js`);
+RH.external_module.push(em);
+let fetch_messages=require(`./boot_fetchMessages.js`);
+RH.external_module.push(fetch_messages);
+let role_voice_text=require(`./roleVoiceText.js`);
+RH.external_module.push(role_voice_text);
+*/
+//let RH_build=require(`./rh_builder.js`);
+//RH_build.run(client);
+//_________
+ 
+client.on("raw", (...args) => {try{
+     RH.run(client,...args);
+}catch(err){console.log(err);}; });
+//__________
 
 
 client.login(process.env.TOKEN);
-//
+
+/*
+RH.include(require("some_module"));
+
+*/
