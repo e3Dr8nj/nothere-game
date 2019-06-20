@@ -1,3 +1,4 @@
+//v1.1.1
 exports.RH_IGNORE_TOTAL=true;
 exports.name='s_bumpTopBD';
 const fs = require('fs');
@@ -47,7 +48,7 @@ try{
     await sqlite.open('./$DATA_BASE_NAME').catch(err=>console.log(err));
     let table={};
     let n='*';
-  
+   // console.log(('t'+q_t));
     if(tag==n&&q_t==n){console.log('0');
        table = await sqlite.all(`SELECT * FROM ${TABLE_NAME} `)
         .then(table=>{return table;})
@@ -57,7 +58,7 @@ try{
         .then(table=>{return table;})
         .catch(err=>{console.log(err); return false;});
     }else if(tag!=n&&q_t==n){console.log('2');
-       tag=1000*60*tag;
+       tag=1000*60*60*24*tag;
        let time = t_crnt-tag;
        table = await sqlite.all(`SELECT * FROM ${TABLE_NAME} WHERE t_>${time} `)
         .then(table=>{return table;})
@@ -79,7 +80,7 @@ try{
     if(!obj[e.u_id_]){obj[e.u_id_]=0;};
      obj[e.u_id_]+=e.p_;
   });
-   console.log(obj);
+  // console.log(obj);
    let arr=[];
    for(let key in obj){
        let m_obj={u_id:key,points:obj[key]};
@@ -95,7 +96,7 @@ try{
 exports.getTopTableEmb=async(client,server_ID,quizType,tag)=>{
 //structuring top table in embeds format ,tag==days period, * all time,* all quiz
 try{
-    console.log(tag); console.log(quizType);
+    //console.log(tag); console.log(quizType);
      let top_arr=await module.exports.generateTopArr(client,server_ID,quizType,tag);
      if(!top_arr) return false;
      tag=(tag=='*')?' за все время ':'за '+tag+' дней ';

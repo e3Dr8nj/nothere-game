@@ -32,6 +32,7 @@ module.exports.commands.bumpShowTop={aliase:'бамптоп', run:async(client,m
    // if(message.channel.name!=module.exports.e.channel_name){return;};
     if(!args[1]) args[1]='*';
     if(!args[2]) args[2]='*';
+    console.log(args);
     let emb = await bd.getTopTableEmb(client,message.guild.id,args[1],args[2]);
     if(!emb){message.channel.send('error'); return;};
     message.channel.send({embed:emb});
@@ -53,7 +54,16 @@ module.exports.commands.supEmit={ on:true, aliase:'suped', run:async(client,mess
               message.channel.send({embed:emb});
 
 }catch(err){console.log(err);};}};//
-
+//
+module.exports.commands.bumpPoints={aliase:'bumpPoints', run:async(client,message,args)=>{try{
+     if(!message.mentions.members.first()) return;
+     if(!args[1]||!args[2]||!args[3]) return;
+     let action=args[1];
+     let mmb= message.mentions.members.first();
+     
+     await bd.insert(client,Number(action),mmb.user.id,message.guild.id,args[2]).then(message.channel.send('ok')).catch(err=>console.log(err));
+     return;
+}catch(err){console.log(err);};}};//
 
 //_________________________________________EVENTS_PART_________________________________________________
 module.exports.events={};
@@ -63,7 +73,7 @@ module.exports.events.message={ run:async(client,message)=>{try{
                // if(message.author.bot&&message.indexOf('го бампить!')!=-1){};
                 if(message.content=='!bump'){
                       console.log('await bump resolve');
-                      let filter =(m)=>(m.author.bot&&m.embeds[0]&&m.embeds[0].description.indexOf(':white_check_mark: Server bumped!'));
+                      let filter =(m)=>(m.author.bot&&m.embeds[0]&&m.embeds[0].description.startsWith(':white_check_mark: Server bumped!'));
                       let resolve = await message.channel.awaitMessages(filter,{max:1,time:10*1000,errors:['time']}).then(collected=>{return collected.first();}).catch(err=>{return false;});
                       if(resolve) await bd.insert(client,1,message.member.user.id,message.guild.id,'!bump');//--
                       if(resolve){message.channel.send('point add');};
@@ -94,6 +104,7 @@ module.exports.getTable=async(client,message,mmb,light)=>{try{
             str+=(light&&arr[i]==mmb.user.id)?'':client.quiz_score[arr[i]]+'    '+un+'\n';
        };//for i
        if(str=='') str='_';
+       str=(str.length<1900)?str:str.slice(0,1900);
        let embed={fields:[{name:module.exports.e.local_top_name+" "+client.quiz_type,value:str}]};//
         console.log(embed);
        return embed;
