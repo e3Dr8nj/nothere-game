@@ -46,7 +46,9 @@ client.on("raw", (...args) => {try{
 //___________
 let RH=require(`./raw.js`);
 
-RH.folder_name='modules';
+RH.folder_name='./modules';
+RH.fetch_messages=false;
+RH.server_id=client.SERVER_ID;
 /*
 //_________
 

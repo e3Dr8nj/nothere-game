@@ -22,8 +22,8 @@ module.exports.commands.quizHelp={aliase:'quizHelp', run:async(client,message,ar
     str+="["+client.prefix+"quizShowTop <тип викторины> <период в днях>] -показать рейтинг викторины за указанный период \n";
     str+=" '*'- все типы викторины, '*'-все время \n";
     str+="доступные типы викторины: logic, films, games, free, education \n";
-    str+="["+client.prefix+"quizPointsAdd @username] -дать балл упомянутому участнику \n";
-    str+="["+client.prefix+"quizPointsRemove @username] -снять балл с упомянутого участника \n";
+    str+="["+client.prefix+"+ @username] -дать балл упомянутому участнику \n";
+    str+="["+client.prefix+"- @username] -снять балл с упомянутого участника \n";
     str+="если ведущий отмечает сообщение реакцией:'✔' автору сообщения начисляется балл в текущей викторине\n";
     str+="если ведущий отмечает сообщение с текущим рейтингом реакцией:'✖' сообщение с рейтингом удаляется\n";
     str+="["+client.prefix+"quizEnd] -закончить викторину(команда от ведущего или три реакций('✔') от участников под сообщением с командой)\n";
@@ -87,7 +87,7 @@ module.exports.commands.quizShowTop={aliase:'quizShowTop', run:async(client,mess
     return;
 }catch(err){console.log(err);};}};//
 //c3
-module.exports.commands.quizPointAdd={aliase:'quizPointAdd', run:async(client,message,args)=>{try{
+module.exports.commands.quizPointAdd={aliase:'+', run:async(client,message,args)=>{try{
     // if(message.channel.name!=module.exports.e.channel_name){message.reply('only on quiz channel avilable');return;};
     if(!client.quiz_leader_id){ return;};
     if(client.quiz_leader_id&&client.quiz_leader_id!=message.author.id) return;
@@ -95,7 +95,7 @@ module.exports.commands.quizPointAdd={aliase:'quizPointAdd', run:async(client,me
     return module.exports.score(client,message,message.mentions.members.first(),'add');
 }catch(err){console.log(err);};}};//
 //c4
-module.exports.commands.quizPointRemove={aliase:'quizPointRemove', run:async(client,message,args)=>{try{
+module.exports.commands.quizPointRemove={aliase:'-', run:async(client,message,args)=>{try{
     // if(message.channel.name!=module.exports.e.channel_name){message.reply('only on quiz channel avilable');return;};
     if(!client.quiz_leader_id){ return;};
     if(client.quiz_leader_id&&client.quiz_leader_id!=message.author.id) return;
