@@ -22,6 +22,7 @@ const process={
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const fs = require("fs");
+
 //___________
 client.commands={};
 client.events_primitive={};
@@ -73,7 +74,7 @@ client.on("raw", (...args) => {try{
 //__________
 
 
-client.login(process.env.TOKEN);
+client.login(process.env.TOKEN).catch(console.error);
 
 /*
 RH.include(require("some_module"));

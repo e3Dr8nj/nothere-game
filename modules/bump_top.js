@@ -1,3 +1,4 @@
+//module.active=false;
 //___
 let bd=require(`../s_bumpTopBd.js`);
 bd.e.table_title='Топ бамперов';

@@ -73,7 +73,7 @@ try{
    
     //let table = await sqlite.all(`SELECT * FROM ${TABLE_NAME}`).then(table=>{return table;}).catch(err=>{console.log(err);});
     if(!table||table.length==0) return false;
-    console.log(table);
+    //console.log(table);
 
   let obj={};
   table.map(e=>{
@@ -101,7 +101,7 @@ try{
      if(!top_arr) return false;
      tag=(tag=='*')?' за все время ':'за '+tag+' дней ';
      quizType=(quizType=='*')?'тип:все ':'тип:'+quizType;
-     console.log(top_arr);
+     //console.log(top_arr);
      let name=module.exports.e.table_title+' '+quizType+' '+tag+' \n';
      let str='';
      let lst_pnts=top_arr[0].points;
@@ -113,7 +113,7 @@ try{
            let mmb=client.guilds.get(server_ID).members.get(e.u_id);
            if(e.points!=lst_pnts){pos++};
            let smb = (!!pos_smb[pos])?pos_smb[pos]:'   ';
-           str+=pos+smb+' '+e.points+' '+mmb+'\n';
+           str+=pos+smb+' ||'+e.points+'|| '+mmb+'\n';
            lst_pnts=e.points;
          });
         
