@@ -106,7 +106,7 @@ try{
      let str='';
      let lst_pnts=top_arr[0].points;
      let max=top_arr[0].points; 
-     let pos_smb=[0,'🏆','🏅'];
+     let pos_smb=[0,'🏆','🥈','🥉'];
   
      let pos=1;
      top_arr.map(e=>{

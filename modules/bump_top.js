@@ -74,8 +74,9 @@ module.exports.events.message={ run:async(client,message)=>{try{
                 if(message.content=='!bump'){
                       console.log('await bump resolve');
                       let filter =(m)=>(m.author.bot&&m.embeds[0]&&m.embeds[0].description.startsWith(':white_check_mark: Server bumped!'));
-                      let resolve = await message.channel.awaitMessages(filter,{max:1,time:10*1000,errors:['time']}).then(collected=>{return collected.first();}).catch(err=>{return false;});
+                      let resolve = await message.channel.awaitMessages(filter,{max:1,time:20*1000,errors:['time']}).then(collected=>{return collected.first();}).catch(err=>{return false;});
                       if(resolve) await bd.insert(client,1,message.member.user.id,message.guild.id,'!bump');//--
+                      if(!resolve) message.channel.send('err:01');
                       if(resolve){message.channel.send('point add');};
                  };
                  if(message.content=='s.up'){
