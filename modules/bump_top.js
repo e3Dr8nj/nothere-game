@@ -83,8 +83,9 @@ module.exports.events.message={ run:async(client,message)=>{try{
                  if(message.content=='s.up'){
                       console.log('await s.up resolve');
                       let filter =(m)=>(m.embeds[0]&&m.embeds[0].author&&m.embeds[0].author.name&&( m.embeds[0].author.name.startsWith('Сервер Up')));
-                      let resolve = await message.channel.awaitMessages(filter,{max:1,time:10*1000,errors:['time']}).then(collected=>{return collected.first();}).catch(err=>{return false;});
+                      let resolve = await message.channel.awaitMessages(filter,{max:1,time:20*1000,errors:['time']}).then(collected=>{return collected.first();}).catch(err=>{return false;});
                       if(resolve)  await bd.insert(client,1,message.member.user.id,message.guild.id,'s.up');//--
+                      if(!resolve) message.channel.send('err:02');
                       if(resolve){message.channel.send('point add');};
                  };
 
