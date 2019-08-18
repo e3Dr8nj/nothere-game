@@ -24,6 +24,7 @@ const client = new Discord.Client();
 const fs = require("fs");
 
 //___________
+client.lang=1;
 client.commands={};
 client.events_primitive={};
 client.test_mode=false;

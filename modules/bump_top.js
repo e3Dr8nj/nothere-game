@@ -44,8 +44,8 @@ module.exports.commands.bumpShowTop={aliase:'бамптоп', run:async(client,m
 //c
 module.exports.commands.bumpEmit={ on:true, aliase:'bumped', run:async(client,message,args)=>{try{
 //if on this function triggers on deffined command
-             let emb={description:':white_check_mark: Server bumped!'};
-              message.channel.send({embed:emb});
+             //let emb={description:':white_check_mark: Server bumped!'};
+             // message.channel.send({embed:emb});
 
 }catch(err){console.log(err);};}};//
 //c
@@ -74,15 +74,15 @@ module.exports.events.message={ run:async(client,message)=>{try{
                // if(message.author.bot&&message.indexOf('го бампить!')!=-1){};
                 if(message.content=='!bump'){
                       console.log('await bump resolve');
-                      let filter =(m)=>(m.author.bot&&m.embeds[0]&&m.embeds[0].description.startsWith(':white_check_mark: Server bumped!'));
+                      let filter =(m)=>(m.author.bot&&m.embeds[0]&&m.embeds[0].description.startsWith('[Top Discord Servers]') );
                       let resolve = await message.channel.awaitMessages(filter,{max:1,time:20*1000,errors:['time']}).then(collected=>{return collected.first();}).catch(err=>{return false;});
                       if(resolve) await bd.insert(client,1,message.member.user.id,message.guild.id,'!bump');//--
                       if(!resolve) message.channel.send('err:01');
                       if(resolve){message.channel.send('point add');};
                  };
-                 if(message.content=='s.up'){
+                 if(message.content.toLowerCase()=='s.up'){
                       console.log('await s.up resolve');
-                      let filter =(m)=>(m.embeds[0]&&m.embeds[0].author&&m.embeds[0].author.name&&( m.embeds[0].author.name.startsWith('Сервер Up')));
+                      let filter =(m)=>(m.author.bot&& m.embeds[0]&&m.embeds[0].author&&m.embeds[0].author.name&&( m.embeds[0].author.name.startsWith('Сервер Up'))  );
                       let resolve = await message.channel.awaitMessages(filter,{max:1,time:20*1000,errors:['time']}).then(collected=>{return collected.first();}).catch(err=>{return false;});
                       if(resolve)  await bd.insert(client,1,message.member.user.id,message.guild.id,'s.up');//--
                       if(!resolve) message.channel.send('err:02');

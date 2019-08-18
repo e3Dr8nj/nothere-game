@@ -105,6 +105,8 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
   let rnd_game=Math.floor(Math.random()*5);
   client.duel_count=(client.duel_count)?client.duel_count+1:0;
   if (Number(client.duel_count)<7&&rnd_game==3){rnd_game=2;};
+  console.log(client.duel_count);
+  //if (Number(client.duel_count)>5){rnd_game=3;};
   //rnd_game=3;
   if(rnd_game==0) {
   await message.channel.send(loser+module.exports.d.aganist_fault[client.lang]+winner+' '+module.exports.d.fault[client.lang]);
@@ -238,7 +240,7 @@ module.exports.description=async(client)=>{try{
 //___________________________
 
 module.exports.mute=async(client,message,mmb)=>{try{
-        let msg = await message.channel.send('^rewire помолчика '+mmb+' '+module.exports.e.ban_time+'м');
+        let msg = await message.channel.send('^rewire \помолчика '+mmb+' '+module.exports.e.ban_time+'м');
         msg.delete();
         return;
 }catch(err){console.log(err);};};//

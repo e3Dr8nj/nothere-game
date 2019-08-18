@@ -267,7 +267,7 @@ module.exports.fetchMessages={ on:true,  run:async(client,id)=>{try{
               ch_ids.push(ch.id);
             });//
             // console.log(ch_ids);
-            for(i=0;i<ch_ids.length;i++){
+            for(let i=0;i<ch_ids.length;i++){
                    let channel =  await server.channels.get(ch_ids[i]); 
                   
                    if (channel.type=='category'||channel.type==='voice') {continue;};  

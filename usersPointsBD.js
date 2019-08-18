@@ -17,7 +17,7 @@ try{
     
     const DATA_BASE_NAME=module.exports.system.DATA_BASE_NAME;
     const TABLE_NAME = module.exports.system.TABLE_NAME;
-    await sqlite.open('./$DATA_BASE_NAME').catch(err=>console.log(err));
+    await sqlite.open(`./${DATA_BASE_NAME}`).catch(err=>console.log(err));
     console.log('open db');
    
   let resolve = await sqlite.run(`INSERT INTO ${TABLE_NAME} (p_,u_id_,s_id_,q_t_,t_) VALUES(${p},'${u_id}','${s_id}','${q_t}','${t}')`)
@@ -42,7 +42,7 @@ try{
     let t_crnt=new Date().getTime();
     const DATA_BASE_NAME=module.exports.system.DATA_BASE_NAME;
     const TABLE_NAME = module.exports.system.TABLE_NAME;
-    await sqlite.open('./$DATA_BASE_NAME').catch(err=>console.log(err));
+    await sqlite.open(`./${DATA_BASE_NAME}`).catch(err=>console.log(err));
     let table={};
     let n='*';
   
