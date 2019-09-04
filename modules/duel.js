@@ -11,7 +11,7 @@ exports.d={
 
       duel:['Duel!','Дуэль!']//aliase
      ,fire:['Fire!','Огонь!']
-     ,field1:[' ','<:34:402137690318962688>☠ ']
+     ,field1:[' ','<:114:589907780933124311><:78:589907858578210855>☠ ']
       ,field:['[lose...]','[трагически погибает...]']
      ,recovery:['[recovery some minutes later ','[воскрешение через ']
      ,recovered:['is recovered now','Воскрес  <:37:402137752746983445> ']
@@ -19,10 +19,10 @@ exports.d={
      ,start_phrase:['Get ready your guns for buttle.','Дуэлянты, зарядите ваши псевдоревольверы.']
      ,minutes:['minutes]','минут]']
      ,time_is_out:['Time awaiting reactions is out','Время ожидания реакции истекло']
-     ,aganist:[' 💥 🔫  ',' <:45:483222500570955777>      💥 🔫  ']
-     ,aganist_fault:[' 💥 🔫  ',' <:25:402137378048835584>      💥 🔫  ']
-     ,aganist_misfire:['  🔫  ',' <:9_:483222163797835794>       🔫  ']
-     ,aganist_evade:[' 💥 🔫  ',' <:14:488334083613523978>      💥 🔫  ']
+     ,aganist:[' 💥 🔫  ',' <:29:589907121370431592>     💥 🔫  ']
+     ,aganist_fault:[' 💥 🔫  ',' <:37:589907225737428992>     💥 🔫  ']
+     ,aganist_misfire:['  🔫  ',' <:111:589907827565264906>      🔫  ']
+     ,aganist_evade:[' 💥 🔫  ',' <:86:589907989339832339>      💥 🔫  ']
      ,fault:[' `fault` ',' `промах` ']
      ,misfire:[' `misfire` ',' `осечка` ']
      ,evade:[' `evade` ',' `уклонился` ']
@@ -71,6 +71,8 @@ module.exports.events.guildMemberAdd={ on:true,  run:async(client,member)=>{try{
 //_________________________________________COMMANDS_PART_________________________________________________
 module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module.exports.lang], run:async(client,message,args)=>{try{
 //if on this function triggers on deffined command
+  client.duel_count=0;
+  async function a(client,message){
    if(!client.duel.active){ return;};
    let emb={
           description:module.exports.d.start_phrase[client.lang]
@@ -100,31 +102,32 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
   let rnd = Math.floor(Math.random()*2);
   await module.exports.delay(1000);
   
-  let loser = mmbs[rnd];
+  let loser = mmbs[rnd]; 
   let winner =(rnd==1)?mmbs[0]:mmbs[1];
   let rnd_game=Math.floor(Math.random()*5);
-  client.duel_count=(client.duel_count)?client.duel_count+1:0;
-  if (Number(client.duel_count)<7&&rnd_game==3){rnd_game=2;};
-  console.log(client.duel_count);
-  //if (Number(client.duel_count)>5){rnd_game=3;};
+  //message.channel.send(rnd+" "+rnd_game);
+  client.duel_count++;
+  if (Number(client.duel_count)<5&&rnd_game==3){rnd_game=2;};
+  //message.channel.send(client.duel_count);
+  if (Number(client.duel_count)>5){rnd_game=3;};
   //rnd_game=3;
   if(rnd_game==0) {
   await message.channel.send(loser+module.exports.d.aganist_fault[client.lang]+winner+' '+module.exports.d.fault[client.lang]);
-  return module.exports.commands.duelStart.run(client,message);
+  return a(client,message);
   };//if field
   if(rnd_game==1) {
   await message.channel.send(loser+module.exports.d.aganist_misfire[client.lang]+winner+' '+module.exports.d.misfire[client.lang]);
-  return module.exports.commands.duelStart.run(client,message);
+  return a(client,message);
   };//if field
   if(rnd_game==2) {
   await message.channel.send(module.exports.d.evade[client.lang]+loser+module.exports.d.aganist_evade[client.lang]+winner);
-  return module.exports.commands.duelStart.run(client,message);
+  return a(client,message);
   };//if field
   if(rnd_game==3) {
   //await message.channel.send(loser+' '+winner+' '+module.exports.d.both[client.lang]);
       let lia = message.guild.members.get('436917208560435211');
     lia=(lia)?lia:' ';
- await message.channel.send(winner+loser+'<:45:483222500570955777> <:45:483222500570955777>    💥 🔫'+lia+" "+module.exports.d.both[client.lang]);
+ await message.channel.send(winner+loser+'<:29:589907121370431592><:29:589907121370431592>    💥 🔫'+lia+" "+module.exports.d.both[client.lang]);
  
   await module.exports.mute(client,message,loser);
   await module.exports.delay(30*1000);
@@ -138,7 +141,8 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
  let x=module.exports.e.delay_ban_time;
       let str=loser+module.exports.d.field1[client.lang]+'```ini\n '+ module.exports.d.field[client.lang];
       let msg2 =await message.channel.send(str+"["+x+"]"+"\n```");
-      while(x!=0){console.log(x);
+      while(x!=0){
+        //console.log(x);
          await module.exports.delay(1000); x--;
          await msg2.edit(str+"["+x+"]"+"\n```");
       };
@@ -147,6 +151,8 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
      await module.exports.mute(client,message,loser);
      await module.exports.delay(module.exports.e.ban_time*1000*60);
      await message.channel.send(loser+' '+module.exports.d.recovered[client.lang]);
+  return;};
+  a(client,message);
     return;
 /*
      await message.channel.send('.rewire \помолчика '+loser+' 40м');
@@ -240,7 +246,7 @@ module.exports.description=async(client)=>{try{
 //___________________________
 
 module.exports.mute=async(client,message,mmb)=>{try{
-        let msg = await message.channel.send('^rewire \помолчика '+mmb+' '+module.exports.e.ban_time+'м');
+        let msg = await message.channel.send('^rewire \\помолчика '+mmb+' '+module.exports.e.ban_time+'м');
         msg.delete();
         return;
 }catch(err){console.log(err);};};//

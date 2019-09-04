@@ -110,8 +110,10 @@ try{
   
      let pos=1;
      top_arr.map(e=>{
-           let mmb=client.guilds.get(server_ID).members.get(e.u_id);
+           let mmb= client.guilds.get(server_ID).members.get(e.u_id);
+           if (!mmb) return;
            if(e.points!=lst_pnts){pos++};
+           
            let smb = (!!pos_smb[pos])?pos_smb[pos]:'   ';
            str+='||'+pos+'||'+smb+' '+e.points+' '+mmb+'\n';
            lst_pnts=e.points;

@@ -51,7 +51,7 @@ module.exports.commands.bumpEmit={ on:true, aliase:'bumped', run:async(client,me
 //c
 module.exports.commands.supEmit={ on:true, aliase:'suped', run:async(client,message,args)=>{try{
 //if on this function triggers on deffined command
-             let emb={author:{name:'Сервер Up'} };
+             let emb={author:{name:'Сервер Up'} ,footer:{text:'test#00000'} };
               message.channel.send({embed:emb});
 
 }catch(err){console.log(err);};}};//
@@ -72,6 +72,7 @@ module.exports.events={};
 module.exports.events.message={ run:async(client,message)=>{try{
                 if (message.type=='dm') return;
                // if(message.author.bot&&message.indexOf('го бампить!')!=-1){};
+/*
                 if(message.content=='!bump'){
                       console.log('await bump resolve');
                       let filter =(m)=>(m.author.bot&&m.embeds[0]&&m.embeds[0].description.startsWith('[Top Discord Servers]') );
@@ -80,6 +81,20 @@ module.exports.events.message={ run:async(client,message)=>{try{
                       if(!resolve) message.channel.send('err:01');
                       if(resolve){message.channel.send('point add');};
                  };
+*/
+//__________________bump add point
+                 if( message.author.bot&&message.embeds[0]&&message.embeds[0].description&&message.embeds[0].description.startsWith('[Top Discord Servers]') ){
+ 
+                     var patt1 = /\d{7,}/g; 
+                     var u_id = message.embeds[0].description.match(patt1);
+                     if(!u_id) { message.channel.send('err:01'); return;};
+                    await bd.insert(client,1,u_id,message.guild.id,'!bump');
+                    message.channel.send('point add');
+                     return;
+                  };
+//__________________
+
+/*
                  if(message.content.toLowerCase()=='s.up'){
                       console.log('await s.up resolve');
                       let filter =(m)=>(m.author.bot&& m.embeds[0]&&m.embeds[0].author&&m.embeds[0].author.name&&( m.embeds[0].author.name.startsWith('Сервер Up'))  );
@@ -88,7 +103,18 @@ module.exports.events.message={ run:async(client,message)=>{try{
                       if(!resolve) message.channel.send('err:02');
                       if(resolve){message.channel.send('point add');};
                  };
-
+*/
+//_____________s.up add point
+                if(message.author.bot&& message.embeds[0]&&message.embeds[0].author&&message.embeds[0].author.name&&( message.embeds[0].author.name.startsWith('Сервер Up')) ){
+                    
+                    let user_disc=message.embeds[0].footer.text.split('#'); console.log(user_disc);
+                    let mmb_sup=message.guild.members.find(m=>m.user.discriminator==user_disc[1]&&m.user.username==user_disc[0]);
+                    
+                    if(!mmb_sup){ message.channel.send('err:02'); return;};
+                    await bd.insert(client,1,mmb_sup.user.id,message.guild.id,'s.up');
+                     message.channel.send('point add');
+};
+//_____________
 
 }catch(err){console.log(err);};}};//
 
