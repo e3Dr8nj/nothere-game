@@ -58,11 +58,19 @@ module.exports.commands.supEmit={ on:true, aliase:'suped', run:async(client,mess
 //
 module.exports.commands.bumpPoints={aliase:'bumpPoints', run:async(client,message,args)=>{try{
      if(!message.mentions.members.first()) return;
+  console.log('pre');
      if(!args[1]||!args[2]||!args[3]) return;
+   console.log('pre2');
      let action=args[1];
-     let mmb= message.mentions.members.first();
-     
-     await bd.insert(client,Number(action),mmb.user.id,message.guild.id,args[2]).then(message.channel.send('ok')).catch(err=>console.log(err));
+     //let mmb= message.mentions.members.first();
+  console.log(message.mentions.members.keyArray().length);
+     for(let i=0;i<message.mentions.members.keyArray().length;i++){
+       console.log(i);
+       let mmb= await message.member.guild.fetchMember(message.mentions.members.keyArray()[i]).catch(err=>console.log(err));
+       console.log(i);
+      await bd.insert(client,Number(action),mmb.user.id,message.guild.id,args[2]).then(message.channel.send('ok')).catch(err=>console.log(err));
+     };
+     //await bd.insert(client,Number(action),mmb.user.id,message.guild.id,args[2]).then(message.channel.send('ok')).catch(err=>console.log(err));
      return;
 }catch(err){console.log(err);};}};//
 
