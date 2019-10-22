@@ -42,16 +42,16 @@ module.exports.commands.bumpShowTop={aliase:'бамптоп', run:async(client,m
 
 
 //c
-module.exports.commands.bumpEmit={ on:true, aliase:'bumped', run:async(client,message,args)=>{try{
+module.exports.commands.bumpEmit={ on:true, aliase:'bumped2', run:async(client,message,args)=>{try{
 //if on this function triggers on deffined command
-             //let emb={description:':white_check_mark: Server bumped!'};
-             // message.channel.send({embed:emb});
+             let emb={description:'[Top Discord Servers]'};
+             message.channel.send({embed:emb});
 
 }catch(err){console.log(err);};}};//
 //c
 module.exports.commands.supEmit={ on:true, aliase:'suped', run:async(client,message,args)=>{try{
 //if on this function triggers on deffined command
-             let emb={author:{name:'Сервер Up'} ,footer:{text:'test#00000'} };
+             let emb={title:'Сервер Up',footer:{text:'test#00000'} };
               message.channel.send({embed:emb});
 
 }catch(err){console.log(err);};}};//
@@ -113,14 +113,16 @@ module.exports.events.message={ run:async(client,message)=>{try{
                  };
 */
 //_____________s.up add point
-                if(message.author.bot&& message.embeds[0]&&message.embeds[0].author&&message.embeds[0].author.name&&( message.embeds[0].author.name.startsWith('Сервер Up')) ){
+                if(message.author.bot&& message.embeds[0]&&message.embeds[0].title&&message.embeds[0].title.startsWith('Сервер Up') ){
                     
                     let user_disc=message.embeds[0].footer.text.split('#'); console.log(user_disc);
                     let mmb_sup=message.guild.members.find(m=>m.user.discriminator==user_disc[1]&&m.user.username==user_disc[0]);
-                    
+                    module.exports.commands.bumpEmit.run(client,message);//---
                     if(!mmb_sup){ message.channel.send('err:02'); return;};
                     await bd.insert(client,1,mmb_sup.user.id,message.guild.id,'s.up');
                      message.channel.send('point add');
+                     
+                  
 };
 //_____________
 

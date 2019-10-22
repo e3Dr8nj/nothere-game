@@ -11,11 +11,11 @@ exports.d={
 
       duel:['Duel!','Дуэль!']//aliase
      ,fire:['Fire!','Огонь!']
-     ,field1:[' ','<:114:589907780933124311><:78:589907858578210855>☠ ']
+     ,field1:[' ','<:78:589907858578210855>☠ ']
       ,field:['[lose...]','[трагически погибает...]']
      ,recovery:['[recovery some minutes later ','[воскрешение через ']
-     ,recovered:['is recovered now','Воскрес  <:37:402137752746983445> ']
-     ,recovered_both:['is recovered now','Воскресли  <:37:402137752746983445> ']
+     ,recovered:['is recovered now','Воскрес  <:86:589907989339832339>']
+     ,recovered_both:['is recovered now','Воскресли  <:86:589907989339832339>']
      ,start_phrase:['Get ready your guns for buttle.','Дуэлянты, зарядите ваши псевдоревольверы.']
      ,minutes:['minutes]','минут]']
      ,time_is_out:['Time awaiting reactions is out','Время ожидания реакции истекло']

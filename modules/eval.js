@@ -3,7 +3,9 @@ exports.on=true;
 exports.dictionary={
 'use':['You cannot use it','Ты не можешь использовать эту комманду']
 };
-exports.run =(client,message,args)=>{
+exports.commands={};
+exports.commands.run1={aliase:'eval'};
+exports.commands.run1.run =(client,message,args)=>{
 if(message.author.id!='437330563423010827') return message.reply(module.exports.dictionary['use'][client.lang]);
 /*if(message.author.id!='437330563423010827'){
    const code = args.slice(1).join(" ");
