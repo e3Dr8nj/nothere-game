@@ -11,7 +11,7 @@ exports.d={
 
       duel:['Duel!','Дуэль!']//aliase
      ,fire:['Fire!','Огонь!']
-     ,field1:[' ','<:78:589907858578210855>☠ ']
+     ,field1:[' ','☠ ']
       ,field:['[lose...]','[трагически погибает...]']
      ,recovery:['[recovery some minutes later ','[воскрешение через ']
      ,recovered:['is recovered now','Воскрес  <:86:589907989339832339>']
@@ -33,9 +33,9 @@ exports.d={
 exports.e={
      image_url:'https://raw.githubusercontent.com/e3Dr8nj/file_storage/master/30EMZfei1z7xK.gif'
      ,delay_ban_time:30//sec
-     ,react_awaiting_time:5//min
-     ,ban_time:40//min
-     
+     ,react_awaiting_time:1//min
+     ,ban_time:60//min
+     ,channel_id:'416255611819524097'
      ,ban_role_name:'Muted'  
      
 };//e end
@@ -71,8 +71,11 @@ module.exports.events.guildMemberAdd={ on:true,  run:async(client,member)=>{try{
 //_________________________________________COMMANDS_PART_________________________________________________
 module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module.exports.lang], run:async(client,message,args)=>{try{
 //if on this function triggers on deffined command
-  client.duel_count=0;
+ if(message.channel.id!=exports.e.channel_id) return;
+  if(!client.duel_count) client.duel_count=0;
+  if(client.duel_count!=0) return message.reply('Дуэль уже идет.');
   async function a(client,message){
+    message.channel.send('n '+client.duel_count);
    if(!client.duel.active){ return;};
    let emb={
           description:module.exports.d.start_phrase[client.lang]
@@ -87,7 +90,7 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
     let resolve = await msg.awaitReactions(filter,{max:2,time:module.exports.e.react_awaiting_time*1000*60,errors:['time']}).then(collected=>{
       return collected.last();}).catch(err=>{console.log(err);return false;});
    
-   if(!resolve) {message.channel.send(module.exports.d.time_is_out[client.lang]); return;};
+   if(!resolve) {message.channel.send(module.exports.d.time_is_out[client.lang]); return client.duel_count=0;};
 
    let mmbs=[];
    await resolve.users.map(u=>{
@@ -107,9 +110,9 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
   let rnd_game=Math.floor(Math.random()*5);
   //message.channel.send(rnd+" "+rnd_game);
   client.duel_count++;
-  if (Number(client.duel_count)<5&&rnd_game==3){rnd_game=2;};
+  if (Number(client.duel_count)<7&&rnd_game==3){rnd_game=2;};
   //message.channel.send(client.duel_count);
-  if (Number(client.duel_count)>5){rnd_game=3;};
+  if (Number(client.duel_count)>7){rnd_game=3;};
   //rnd_game=3;
   if(rnd_game==0) {
   await message.channel.send(loser+module.exports.d.aganist_fault[client.lang]+winner+' '+module.exports.d.fault[client.lang]);
@@ -124,6 +127,7 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
   return a(client,message);
   };//if field
   if(rnd_game==3) {
+    client.duel_count=0;
   //await message.channel.send(loser+' '+winner+' '+module.exports.d.both[client.lang]);
       let lia = message.guild.members.get('436917208560435211');
     lia=(lia)?lia:' ';
@@ -137,6 +141,7 @@ module.exports.commands.duelStart={ on:true, aliase:module.exports.d.duel[module
    return;
  // return module.exports.commands.duelStart.run(client,message);
   };//if field
+    client.duel_count=0;
   await message.channel.send(loser+module.exports.d.aganist[client.lang]+winner);
  let x=module.exports.e.delay_ban_time;
       let str=loser+module.exports.d.field1[client.lang]+'```ini\n '+ module.exports.d.field[client.lang];
@@ -246,7 +251,7 @@ module.exports.description=async(client)=>{try{
 //___________________________
 
 module.exports.mute=async(client,message,mmb)=>{try{
-        let msg = await message.channel.send('^rewire \\помолчика '+mmb+' '+module.exports.e.ban_time+'м');
+        let msg = await message.channel.send('^rewire \\мут '+mmb+' '+module.exports.e.ban_time+'м');
         msg.delete();
         return;
 }catch(err){console.log(err);};};//

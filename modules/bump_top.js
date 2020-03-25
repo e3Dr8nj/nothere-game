@@ -117,7 +117,7 @@ module.exports.events.message={ run:async(client,message)=>{try{
                     
                     let user_disc=message.embeds[0].footer.text.split('#'); console.log(user_disc);
                     let mmb_sup=message.guild.members.find(m=>m.user.discriminator==user_disc[1]&&m.user.username==user_disc[0]);
-                    module.exports.commands.bumpEmit.run(client,message);//---
+                    //module.exports.commands.bumpEmit.run(client,message);//---
                     if(!mmb_sup){ message.channel.send('err:02'); return;};
                     await bd.insert(client,1,mmb_sup.user.id,message.guild.id,'s.up');
                      message.channel.send('point add');
