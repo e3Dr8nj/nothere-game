@@ -29,7 +29,7 @@ client.commands={};
 client.events_primitive={};
 client.test_mode=false;
 //______________
-client.prefix='!';
+client.prefix='\\';
 client.SERVER_ID='301063859702071316';
 //client.SERVER_ID='';//SERVER ID HERE
 
