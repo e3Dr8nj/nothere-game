@@ -93,7 +93,8 @@ if(temp_mmbs_id.length!=0){
 module.exports.commands = {};
 
 module.exports.commands.test={aliase:'тест', run:async(client,message,args)=>{try{
-  if(client.users.get(exports.bbi).presence.status=='online') return console.log('bbi is online');
+
+   if(client.users.get(exports.bbi).presence.status=='online') return console.log('bbi is online');
    let channel_true=module.exports.e.channels_exceptions.includes(message.channel.id);
               if(!channel_true) return;
       client.emit('guildMemberAdd',message.member);
@@ -106,6 +107,7 @@ module.exports.commands.test={aliase:'тест', run:async(client,message,args)=
 module.exports.events={};
 
 module.exports.events.guildMemberAdd={ run:async(client,member)=>{try{
+  console.log(client.users.get(exports.bbi).presence.status);
     if(client.users.get(exports.bbi).presence.status=='online') return console.log('bbi is online');
     return exports.run(client,member);
 }catch(err){console.log(err);};}};//

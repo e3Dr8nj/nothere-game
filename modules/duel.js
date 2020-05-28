@@ -57,7 +57,7 @@ module.exports.events.someEvent={ on:true,  run:async(client,event_parametrs)=>{
 //_________e1
 module.exports.events.guildMemberAdd={ on:true,  run:async(client,member)=>{try{
 //check if member has banned add super_ban role
-                       return;
+                   //    return;
 /*
             console.log(client.duel);
             if(client.duel&&client.duel[member.user.id]&&client.duel[member.user.id].length!=0){

@@ -2,7 +2,7 @@
 let delay=async(duration)=>{await new Promise(resolve=>setTimeout(resolve,duration))}; 
      //* for delay inside async function, use it instead setTimeout
 let random =(max)=>{ return Math.floor(Math.random()*max);};
-exports.bbi='436917208560435211';
+
 
 //_________________PART MANAGER (OPCIONAL)
 module.exports.active=true;//for previous rh_handler version(true=module on/false=module off);
@@ -15,40 +15,43 @@ module.exports.active=true;//for previous rh_handler version(true=module on/fals
 
 //___________________________ETERNAL_VARIABLE_PART
 module.exports.e={
-  bot_name:'bump top&duels'
-  ,bot_info:'дуэли, подсчет очков в викторинах и бампа'
+  channel_log_name:'logbot'
+  ,bot_name:'A_bot'
+  ,bot_info:'info'
+  ,request:'?x00'
+  ,feedback:'!z00'
+
+  //,ch_ping_id:'691751315742654554'
 }
 
 //_________________________________________BOOTS_PART___________________________________________________
 module.exports.boots = {}; 
-
-module.exports.boots.someBoot={on:true,run:async(client)=>{try{
-  let ch_ping_id='691751315742654554';
-  let ping_m=5;
-let ping_time=ping_m*1000*60;
-  let ch_ping = await client.channels.get(ch_ping_id);
-  let d=new Date(new Date().getTime()+(3*60*60*1000));
-              d= d.toISOString().replace(/z|t/gi,' ');
-   if(ch_ping) {
-     let msg=await ch_ping.send('bot:'+exports.e.bot_name+' tag:'+ping_m+'min  online:'+d.split('.')[0]+',').catch(console.error);
-     let i=0;
-   async function hold(){
-       await delay(ping_time);
+module.exports.boots.someBoot1={on:true,run:async(client)=>{try{
+  client.feedback=exports.e.feedback;
+  let ch = await client.channels.find(ch=>ch.name==exports.e.channel_log_name);
+  if(!ch) return;
+  await ch.send(exports.e.request+exports.e.bot_name).catch((err)=>{console.error});
+  const filter = m => m.content.startsWith(exports.e.feedback+exports.e.bot_name) ;
+  let res = await ch.awaitMessages(filter, { max: 1, time: 10000, errors: ['time'] })
+  .then(collected => {return collected;})
+  .catch(err=>console.log(err));
   
-       let d_item=new Date(new Date().getTime()+(3*60*60*1000)); d_item= d_item.toISOString().replace(/z|t/gi,' ');
-         await msg.edit(msg.content.split(',')[0]+', last ping time: '+d_item.split('.')[0]).catch(console.error);
-       if(i==0) return hold();
-    };
-     return hold();
-     };
+ if(res&&res.size!=0) {await ch.send('rebooted');
+            return process.exit(1);
+           };
 }catch(err){console.log(err);};}};//
+
+
 //module.exports.boots.someBoot.RH_IGNORE=true;//add this line to ignore this command
 //...
 //_________________________________________COMMANDS_PART_________________________________________________
 module.exports.commands = {};
 
-module.exports.commands.someCommand={aliase:'aliase_for_command', run:async(client,message,args)=>{try{
+module.exports.commands.reboot={aliase:'rbt', run:async(client,message,args)=>{try{
    //code to execut then this command triggered
+  console.log(args);
+  if(args[1]!=exports.e.bot_name) return;
+  await message.channel.send('reboot'); return process.exit(1);
 }catch(err){console.log(err);};}};//
 //module.exports.commands.someCommand.RH_IGNORE=true;//add this line to ignore this command
 // ...
@@ -58,16 +61,15 @@ module.exports.commands.someCommand={aliase:'aliase_for_command', run:async(clie
 module.exports.events={};
 
 module.exports.events.message={ on:true,run:async(client,message)=>{try{
-     if(message.channel.type!='dm'&&!message.author.bot){ 
-        client.bot_name=(client.bot_name)?client.bot_name:module.exports.e.bot_name;
-        client.bot_info=(client.bot_info)?client.bot_info:module.exports.e.bot_info;
-        if(message.content.startsWith('?!!*')){ message.reply(client.bot_name+' is online'); return;};
-        if(message.content.startsWith('?!!'+client.bot_name+" info")){ message.reply(client.bot_name+" info: "+client.bot_info); return;};
-        if(message.content.startsWith('?!!'+client.bot_name)){ message.reply(client.bot_name+' is online'); return;};
-   };
+ 
+     if(message.channel.type=='dm') return;
+     if(message.content.startsWith(exports.e.request+exports.e.bot_name)){
+       message.channel.send(exports.e.feedback+exports.e.bot_name);
+     };
 
 }catch(err){console.log(err);};}};//
 //module.exports.events.someEvent.RH_IGNORE=true;//add this line to ignore this event trigger
+
 // ...
 //_________________________________________EVENTS_PART_END__________________________________________
 
@@ -87,12 +89,3 @@ try{
 }catch(err){console.log(err);};
 };//createRole end
 
-module.exports.events.guildMemberUpdate={ on:true,run:async(client,oldMember,newMember)=>{try{
-  if(client.users.get(exports.bbi).presence.status=='online') return;
-    if(!oldMember.roles.find(r=>r.name=="Muted")&&(newMember.roles.find(r=>r.name=="Muted"))){
-         await delay(1000);
-        if(!newMember) return;
-         newMember.roles.map(r=>{if(r.name!='Muted') newMember.removeRole(r.id).catch(console.error);});
-    };
-
-}catch(err){console.log(err);};}};//
